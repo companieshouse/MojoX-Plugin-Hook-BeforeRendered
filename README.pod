@@ -1,0 +1,1 @@
+lib/MojoX/Plugin/Hook/BeforeRender.pm
