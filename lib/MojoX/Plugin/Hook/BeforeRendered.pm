@@ -1,4 +1,4 @@
-package MojoX::Plugin::Hook::BeforeRender;
+package MojoX::Plugin::Hook::BeforeRendered;
 
 use Mojo::Base 'Mojolicious::Plugin';
 use Mojo::Util qw(monkey_patch);
@@ -38,7 +38,7 @@ sub register {
 
 =head1 NAME
 
-MojoX::Plugin::Hook::BeforeRender - Plugin to inject before_rendered hook into Mojolicious
+MojoX::Plugin::Hook::BeforeRendered - Plugin to inject before_rendered hook into Mojolicious
 
 =head1 SYNOPSIS
 
@@ -46,13 +46,13 @@ MojoX::Plugin::Hook::BeforeRender - Plugin to inject before_rendered hook into M
   {
     ...
     ...
-    $self->plugin('MojoX::Plugin::Hook::BeforeRender');
+    $self->plugin('MojoX::Plugin::Hook::BeforeRendered');
     ...
     ...
   }
 
   $c->hook( before_rendered => sub {
-    my ($next, $c); = @_;
+    my ($next, $c) = @_;
 
     ... do stuff ...
 
@@ -61,7 +61,7 @@ MojoX::Plugin::Hook::BeforeRender - Plugin to inject before_rendered hook into M
 
 =head1 DESCRIPTION
 
-L<MojoX::Plugin::Hook::BeforeRender> patches L<Mojolicious> to provide a
+L<MojoX::Plugin::Hook::BeforeRendered> patches L<Mojolicious> to provide a
 before_rendered hook. This is emitted at the start of the C<rendered>, as
 content is about to be returned to the client.
 
