@@ -32,8 +32,6 @@ sub register {
         # Point $next to the original 'rendered' method
         my $next = sub { $mojo_rendered->( $self, $status ) };
 
-        $self->app->log->info("called rendered()");
-
         if( $self->app->plugins->has_subscribers('before_rendered') && $self->stash->{'mojo.started'}) {
             $self->app->plugins->emit_hook(before_rendered => $next, $self );
         } else {
