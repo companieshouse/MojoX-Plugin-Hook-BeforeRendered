@@ -25,7 +25,7 @@ get '/bar' => sub {
 my $t = Test::Mojo->new;
 
 hook 'before_rendered' => sub {
-	my ($next, $c) = @_;
+my ($next, $c) = @_;
 	ok(1, 'before_rendered hook is called');
 	Mojo::IOLoop->timer(0.1 => sub {
 		ok(1, 'can execute non-blocking code before returning content');

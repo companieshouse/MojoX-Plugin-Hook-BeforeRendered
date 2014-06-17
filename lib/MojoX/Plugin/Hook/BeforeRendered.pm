@@ -4,8 +4,7 @@ use Mojo::Base 'Mojolicious::Plugin';
 use Mojo::Util qw(monkey_patch);
 
 our $VERSION = "0.02";
-
-$MojoX::Plugin::Hook::BeforeRendered::ALREADY_REGISTERED=0;
+my  $ALREADY_REGISTERED=0;
 
 # -----------------------------------------------------------------------------
 
@@ -17,30 +16,29 @@ sub register {
     # by two modules) then the second monkey call will overwrite the original
     # code with a copy of the monkied code - this'll cause it to run multiple
     # times as it goes down the monkey nesting!
-    if ($MojoX::Plugin::Hook::BeforeRendered::ALREADY_REGISTERED) {
-        return;
-    }
+    return if $ALREADY_REGISTERED;
 
     # Grab the existing code ref for rendered
     no strict 'refs';
     my $mojo_rendered = *{$Mojolicious::Controller::{rendered}}{CODE};
     use strict 'refs';
-   
+
+    my $last = sub { my ($next, $self, $status) = @_; $mojo_rendered->( $self, $status ) };
+
     monkey_patch "Mojolicious::Controller", rendered => sub {
         my ($self, $status) = @_;
 
-        # Point $next to the original 'rendered' method
-        my $next = sub { $mojo_rendered->( $self, $status ) };
-
-        if( $self->app->plugins->has_subscribers('before_rendered') && $self->stash->{'mojo.started'}) {
-            $self->app->plugins->emit_hook(before_rendered => $next, $self );
+        if( $self->stash->{'mojo.started'}) {
+            $app->hook(before_rendered => $last);
+            $self->app->plugins->emit_chain(before_rendered => $self, $status );
+            $self->app->plugins->unsubscribe( 'before_rendered', $last );
         } else {
-            $next->();
+            $last->( undef, $self, $status );
         }
         return $self;
     };
-    
-    $MojoX::Plugin::Hook::BeforeRendered::ALREADY_REGISTERED=1;
+
+    $ALREADY_REGISTERED=1;
 }
 
 # -----------------------------------------------------------------------------
