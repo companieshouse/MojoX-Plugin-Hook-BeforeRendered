@@ -3,7 +3,7 @@ package MojoX::Plugin::Hook::BeforeRendered;
 use Mojo::Base 'Mojolicious::Plugin';
 use Mojo::Util qw(monkey_patch);
 
-our $VERSION = "0.02";
+our $VERSION = "0.03";
 my  $ALREADY_REGISTERED=0;
 
 # -----------------------------------------------------------------------------
