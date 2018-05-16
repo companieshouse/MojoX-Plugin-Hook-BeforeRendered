@@ -3,7 +3,7 @@ package MojoX::Plugin::Hook::BeforeRendered;
 use Mojo::Base 'Mojolicious::Plugin';
 use Mojo::Util qw(monkey_patch);
 
-our $VERSION = '0.30';
+our $VERSION = '0.31';
 my  $ALREADY_REGISTERED=0;
 
 # -----------------------------------------------------------------------------
@@ -28,7 +28,7 @@ sub register {
     monkey_patch "Mojolicious::Controller", rendered => sub {
         my ($self, $status) = @_;
 
-        if( $self->stash->{'mojo.started'}) {
+        if( $self->stash->{'mojo.timing'}->{'mojo.timer'}) {
             $app->hook(before_rendered => $last);
             $self->app->plugins->emit_chain(before_rendered => $self, $status );
             $self->app->plugins->unsubscribe( 'before_rendered', $last );

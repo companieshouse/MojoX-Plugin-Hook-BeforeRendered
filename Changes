@@ -1,6 +1,9 @@
-Revision history for CH-Something
+Revision history for MojoX::Plugin::Hook::BeforeRendered
 
 {{$NEXT}}
+
+0.31  2018-05-16
+  - update monkey patch to use 'mojo.timing' stash variable and support upgrade to Mojolicious 7.78
 
 0.30  2014-07-31
   - harmonise to CHGOVUK standard
